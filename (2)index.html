@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workup Job</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<!-- MONETAG SDK -->
+<script src='//libtl.com/sdk.js'
+        data-zone='10397801'
+        data-sdk='show_10397801'></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+:root{
+--primary:#00d26a;
+--bg:#0f1016;
+--card:#1a1c26;
+--text:#fff;
+--dim:#a0a4b8;
+}
+body{
+margin:0;
+font-family:Arial;
+background:var(--bg);
+color:var(--text);
+display:flex;
+flex-direction:column;
+align-items:center;
+padding-bottom:90px;
+}
+.header{text-align:center;padding:25px 0;}
+.logo-img{width:90px;border-radius:50%;border:3px solid var(--primary);}
+.container{width:90%;max-width:400px;}
+.stats-card{
+background:var(--card);
+padding:25px;
+border-radius:20px;
+text-align:center;
+margin-bottom:20px;
+}
+.balance{
+font-size:40px;
+color:var(--primary);
+font-weight:bold;
+}
+.main-btn{
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+background:var(--primary);
+font-size:17px;
+font-weight:bold;
+margin-top:15px;
+cursor:pointer;
+}
+.tab-content{display:none;}
+.active-tab{display:block;}
+.bottom-nav{
+position:fixed;bottom:0;width:100%;max-width:500px;
+background:#161822;
+display:flex;justify-content:space-around;padding:14px 0;
+}
+.nav-item{color:#5c607b;font-size:12px;text-align:center;cursor:pointer;}
+.nav-item.active{color:var(--primary);}
+.nav-item i{font-size:22px;display:block;}
+
+/* AD OVERLAY */
+#ad-overlay{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.95);
+z-index:9999;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+#timer{
+width:90px;height:90px;
+border-radius:50%;
+border:5px solid var(--primary);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+font-weight:bold;
+color:var(--primary);
+}
+</style>
+</head>
+
+<body>
+
+<!-- AD COUNTDOWN -->
+<div id="ad-overlay">
+<div id="timer">15</div>
+<p>Ad চলছে… 15 সেকেন্ড অপেক্ষা কর</p>
+</div>
+
+<div class="header">
+<img src="https://i.ibb.co/69c125/image.png" class="logo-img">
+<h2>Workup Job</h2>
+</div>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home" class="tab-content active-tab">
+<div class="stats-card">
+<p>Balance</p>
+<div class="balance">৳ <span id="balance">0.00</span></div>
+
+<!-- 🔥 MAIN AD BUTTON -->
+<button class="main-btn" onclick="watchAd()">
+<i class="fas fa-play-circle"></i> Watch Ad & Earn
+</button>
+
+</div>
+</div>
+
+<!-- TASK -->
+<div id="task" class="tab-content">
+<div class="stats-card">
+<h3>Join Telegram Channel</h3>
+<p style="color:var(--dim)">Reward ৳3</p>
+<a href="https://t.me/woorkuupjob" target="_blank">
+<button class="main-btn">Join Channel</button>
+</a>
+<button class="main-btn" onclick="claimChannelTask()">Claim ৳3</button>
+</div>
+</div>
+
+<!-- WITHDRAW -->
+<div id="wallet" class="tab-content">
+<div class="stats-card">
+<p style="color:var(--dim)">Minimum Withdraw ৳100</p>
+<input type="number" id="bkash" placeholder="bKash Number" style="width:100%;padding:14px;border-radius:12px;border:none;margin-top:10px;">
+<input type="number" id="amount" placeholder="Withdraw Amount" style="width:100%;padding:14px;border-radius:12px;border:none;margin-top:10px;">
+<button class="main-btn" onclick="withdraw()">Withdraw</button>
+</div>
+</div>
+
+</div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+<div class="nav-item active" onclick="showTab('home',this)">
+<i class="fas fa-home"></i>Home
+</div>
+<div class="nav-item" onclick="showTab('task',this)">
+<i class="fas fa-tasks"></i>Task
+</div>
+<div class="nav-item" onclick="showTab('wallet',this)">
+<i class="fas fa-wallet"></i>Withdraw
+</div>
+</div>
+
+<script>
+let tg = window.Telegram.WebApp;
+tg.expand();
+
+const DIRECT_LINK = "https://otieu.com/4/10398008";
+
+function showTab(id,el){
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active-tab'));
+document.getElementById(id).classList.add('active-tab');
+document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+el.classList.add('active');
+}
+
+function watchAd(){
+let adStarted = false;
+
+try{
+    show_10397801('pop').then(()=>{
+        // SDK closed normally
+    });
+    adStarted = true;
+}catch(e){
+    adStarted = false;
+}
+
+if(!adStarted){
+    window.open(DIRECT_LINK,"_blank");
+}
+
+startCountdown();
+}
+
+function startCountdown(){
+let overlay=document.getElementById("ad-overlay");
+let timerEl=document.getElementById("timer");
+let time=15;
+
+overlay.style.display="flex";
+timerEl.innerText=time;
+
+let interval=setInterval(()=>{
+time--;
+timerEl.innerText=time;
+if(time<=0){
+clearInterval(interval);
+overlay.style.display="none";
+rewardAd();
+}
+},1000);
+}
+
+function rewardAd(){
+let b=document.getElementById("balance");
+b.innerText=(parseFloat(b.innerText)+0.5).toFixed(2);
+tg.showAlert("Ad completed ✅ ৳0.50 added");
+}
+
+function claimChannelTask(){
+show_10397801('pop').then(()=>{
+let b=document.getElementById("balance");
+b.innerText=(parseFloat(b.innerText)+3).toFixed(2);
+tg.showAlert("Channel task completed ✅ ৳3 added");
+});
+}
+
+function withdraw(){
+let bal=parseFloat(document.getElementById("balance").innerText);
+let num=document.getElementById("bkash").value;
+let amt=parseFloat(document.getElementById("amount").value);
+
+if(num.length<11){ tg.showAlert("Valid bKash number দাও"); return; }
+if(!amt || amt<100){ tg.showAlert("Minimum withdraw ৳100"); return; }
+if(amt>bal){ tg.showAlert("Balance কম"); return; }
+
+document.getElementById("balance").innerText=(bal-amt).toFixed(2);
+tg.showAlert("Withdraw request submitted ✅");
+}
+</script>
+
+</body>
+</html>
